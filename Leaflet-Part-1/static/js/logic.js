@@ -45,3 +45,38 @@ var myMap = L.map("map", {
 L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
     attribution: '&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
 }).addTo(myMap)
+
+// Add legend
+let legend = L.control({ position: 'bottomright' });
+
+
+// Create a function to generate the legend content
+function createLegend() {
+  const grades = [0, 10, 100, 200, 300];
+  let legendContent = '<div class="legend"><strong>Earthquake Depth</strong><br>';
+
+  for (let i = 0; i < grades.length; i++) {
+    const color = chooseColor(grades[i]);
+    const nextGrade = grades[i + 1];
+
+    legendContent +=
+      '<i style="background:' +
+      color +
+      '"></i> ' +
+      grades[i] +
+      '<br>';
+  }
+
+  legendContent += '</div>';
+  console.log(legendContent)
+  return legendContent;
+}
+
+// Add the legend to the map
+legend.onAdd = function (myMap) {
+  const div = L.DomUtil.create('div', 'info legend');
+  div.innerHTML = createLegend();
+  return div;
+};
+
+legend.addTo(myMap);
